@@ -663,20 +663,20 @@ class SlidePresentation {
     var container = document.getElementById('liquid-ether-bg');
     if (!container || typeof THREE === 'undefined') return;
 
-    var COLORS = ['#FF9FFC', '#5227FF', '#B19EEF'];
+    var COLORS = ['#a3b931', '#ff9ee0', '#a3ebf0'];
     var MOUSE_FORCE = 20;
-    var CURSOR_SIZE = 100;
+    var CURSOR_SIZE = 40;
     var DT = 0.014;
     var RESOLUTION = 0.5;
     var ITERATIONS_POISSON = 32;
     var ITERATIONS_VISCOUS = 32;
-    var IS_VISCOUS = false;
+    var IS_VISCOUS = true;
     var VISCOUS = 30;
     var IS_BOUNCE = false;
     var BFECC = true;
     var AUTO_SPEED = 0.5;
     var AUTO_INTENSITY = 2.2;
-    var AUTO_RESUME_DELAY = 1000;
+    var AUTO_RESUME_DELAY = 3000;
     var AUTO_RAMP_DURATION = 0.6;
     var TAKEOVER_DURATION = 0.25;
 
