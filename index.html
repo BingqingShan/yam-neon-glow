@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAM — Pitch Deck (Neon Glow)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===========================================
+           THEME: NEON GLOW
+           Deep purple-black with ambient glow orbs,
+           floating particles, gradient text with neon feel
+           =========================================== */
+        :root {
+            --bg-primary: #0c0618;
+            --bg-card: rgba(255,255,255,0.03);
+            --bg-card-border: rgba(255,255,255,0.06);
+            --accent-primary: #e88fc5;
+            --accent-secondary: #b8a0e8;
+            --accent-tertiary: #88d4e8;
+            --text-primary: #f0eef5;
+            --text-muted: rgba(240,238,245,0.4);
+
+            --font-display: 'Bagel Fat One', cursive;
+            --font-body: 'DM Sans', sans-serif;
+            --title-size: clamp(2.5rem, 7vw, 5.5rem);
+            --h2-size: clamp(1.5rem, 3.5vw, 2.8rem);
+            --body-size: clamp(0.75rem, 1.3vw, 1.05rem);
+            --small-size: clamp(0.65rem, 1vw, 0.85rem);
+            --label-size: clamp(0.6rem, 0.85vw, 0.75rem);
+
+            --slide-padding: clamp(1.5rem, 4vw, 4rem);
+            --content-gap: clamp(0.5rem, 1.5vw, 1.5rem);
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration: 0.7s;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+            height: 100%; overflow-x: hidden;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100%; overflow-x: hidden;
+        }
+
+        /* ===========================================
+           SLIDE CONTAINER
+           =========================================== */
+        .slide {
+            width: 100vw; height: 100vh; height: 100dvh;
+            scroll-snap-align: start; position: relative;
+            overflow: hidden; display: flex; flex-direction: column;
+            justify-content: center; padding: var(--slide-padding);
+            background: var(--bg-primary);
+        }
+
+        .slide-inner {
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column;
+            gap: var(--content-gap); max-height: 100%;
+        }
+
+        /* ===========================================
+           AMBIENT GLOW ORBS
+           =========================================== */
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px); opacity: 0.12; z-index: 0;
+            pointer-events: none;
+        }
+        .orb-pink { background: var(--accent-primary); }
+        .orb-purple { background: var(--accent-secondary); }
+        .orb-blue { background: var(--accent-tertiary); }
+
+        /* ===========================================
+           FLOATING PARTICLES
+           =========================================== */
+        .particles {
+            position: absolute; inset: 0;
+            overflow: hidden; z-index: 1; pointer-events: none;
+        }
+        .particle {
+            position: absolute; width: 2px; height: 2px;
+            border-radius: 50%; background: var(--accent-secondary);
+            opacity: 0.25; animation: float linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh); opacity: 0; }
+            10% { opacity: 0.25; }
+            90% { opacity: 0.25; }
+            100% { transform: translateY(-10vh); opacity: 0; }
+        }
+
+        /* ===========================================
+           TYPOGRAPHY
+           =========================================== */
+        .display-text {
+            font-family: var(--font-display);
+            font-size: var(--title-size);
+            font-weight: 400; line-height: 1.1;
+        }
+        .slide-title {
+            font-family: var(--font-display);
+            font-size: var(--h2-size);
+            font-weight: 400; line-height: 1.2;
+        }
+        .section-label {
+            font-size: var(--label-size); font-weight: 700;
+            letter-spacing: 0.25em; text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        .body-text { font-size: var(--body-size); font-weight: 500; line-height: 1.6; }
+        .small-text { font-size: var(--small-size); line-height: 1.5; }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 50%, var(--accent-tertiary) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .glow-text {
+            filter: drop-shadow(0 0 25px rgba(184,160,232,0.35));
+        }
+
+        /* ===========================================
+           CARDS & GRIDS
+           =========================================== */
+        .card-grid { display: grid; gap: clamp(0.5rem, 1.2vw, 1rem); }
+        .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .card-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px;
+            padding: clamp(0.8rem, 1.5vw, 1.5rem);
+            display: flex; flex-direction: column;
+            gap: clamp(0.25rem, 0.6vw, 0.5rem);
+            backdrop-filter: blur(10px);
+            transition: border-color 0.3s ease;
+        }
+        .card:hover { border-color: rgba(184,160,232,0.15); }
+
+        .card-glow {
+            background: linear-gradient(135deg, rgba(232,143,197,0.08), rgba(136,212,232,0.08));
+            border: 1px solid rgba(184,160,232,0.2);
+        }
+
+        .card-icon { font-size: clamp(1.2rem, 2vw, 1.8rem); }
+        .card-title { font-size: clamp(0.8rem, 1.2vw, 1rem); font-weight: 700; }
+        .card-desc { font-size: var(--small-size); line-height: 1.5; color: var(--text-muted); }
+
+        /* ===========================================
+           STATS
+           =========================================== */
+        .stat-number { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 4rem); line-height: 1; }
+        .stat-label { font-size: var(--small-size); font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+        /* ===========================================
+           TIMELINE
+           =========================================== */
+        .timeline { display: flex; gap: clamp(0.4rem, 1vw, 1rem); }
+        .timeline-step {
+            flex: 1; display: flex; flex-direction: column;
+            gap: clamp(0.25rem, 0.5vw, 0.4rem);
+            padding-top: clamp(0.6rem, 1vw, 0.8rem);
+            position: relative;
+        }
+        .timeline-step::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-tertiary));
+            border-radius: 1px;
+            box-shadow: 0 0 8px rgba(184,160,232,0.3);
+        }
+        .step-num { font-family: var(--font-display); font-size: clamp(1rem, 1.8vw, 1.5rem); }
+        .step-title { font-size: clamp(0.75rem, 1.1vw, 0.95rem); font-weight: 700; }
+        .step-desc { font-size: var(--small-size); color: var(--text-muted); line-height: 1.4; }
+
+        /* ===========================================
+           TWO-COL & BULLETS
+           =========================================== */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, 2vw, 2rem); align-items: start; }
+        .bullet-list { list-style: none; display: flex; flex-direction: column; gap: clamp(0.3rem, 0.7vw, 0.6rem); }
+        .bullet-list li { font-size: var(--body-size); line-height: 1.5; padding-left: 1.2em; position: relative; }
+        .bullet-list li::before {
+            content: ''; position: absolute; left: 0; top: 0.55em;
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--accent-secondary);
+            box-shadow: 0 0 6px var(--accent-secondary);
+        }
+
+        /* ===========================================
+           TEAM
+           =========================================== */
+        .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.8rem, 1.5vw, 1.5rem); }
+        .team-name { font-family: var(--font-display); font-size: clamp(1rem, 1.8vw, 1.5rem); }
+        .team-role { font-size: var(--small-size); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+        .team-creds { font-size: var(--small-size); color: var(--text-muted); line-height: 1.4; }
+
+        /* ===========================================
+           DIVIDER LINE
+           =========================================== */
+        .glow-divider {
+            width: clamp(40px, 6vw, 80px); height: 2px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-tertiary));
+            border-radius: 1px;
+            box-shadow: 0 0 10px rgba(184,160,232,0.4);
+        }
+
+        /* ===========================================
+           CORNER ELEMENTS
+           =========================================== */
+        .brand-mark {
+            position: absolute; top: var(--slide-padding); left: var(--slide-padding);
+            font-family: var(--font-display); font-size: clamp(0.7rem, 1vw, 0.9rem);
+            z-index: 10;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-tertiary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .slide-number {
+            position: absolute; bottom: var(--slide-padding); right: var(--slide-padding);
+            font-size: var(--label-size); letter-spacing: 0.15em; color: var(--text-muted); z-index: 10;
+        }
+
+        /* ===========================================
+           ANIMATIONS
+           =========================================== */
+        .reveal {
+            opacity: 0; transform: translateY(20px);
+            transition: opacity var(--duration) var(--ease-out-expo), transform var(--duration) var(--ease-out-expo);
+        }
+        .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* ===========================================
+           PROGRESS & NAV
+           =========================================== */
+        .progress-bar {
+            position: fixed; top: 0; left: 0; height: 2px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
+            box-shadow: 0 0 8px rgba(184,160,232,0.4);
+            z-index: 100; transition: width 0.3s ease; width: 0%;
+        }
+        .nav-dots {
+            position: fixed; right: clamp(0.8rem, 1.5vw, 1.5rem);
+            top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 8px; z-index: 100;
+        }
+        .nav-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: rgba(255,255,255,0.12); border: none;
+            cursor: pointer; transition: all 0.3s; padding: 0;
+        }
+        .nav-dot.active {
+            background: var(--accent-secondary);
+            box-shadow: 0 0 8px var(--accent-secondary);
+            transform: scale(1.4);
+        }
+
+        /* ===========================================
+           RESPONSIVE
+           =========================================== */
+        @media (max-height: 700px) {
+            :root { --slide-padding: clamp(1rem,3vw,2.5rem); --content-gap: clamp(0.4rem,1vw,1rem); --title-size: clamp(2rem,6vw,4rem); --h2-size: clamp(1.2rem,3vw,2.2rem); }
+        }
+        @media (max-height: 600px) {
+            :root { --slide-padding: clamp(0.75rem,2.5vw,1.5rem); --title-size: clamp(1.5rem,5vw,3rem); --body-size: clamp(0.7rem,1.1vw,0.9rem); }
+            .nav-dots, .particles { display: none; }
+        }
+        @media (max-height: 500px) {
+            :root { --slide-padding: clamp(0.5rem,2vw,1rem); --title-size: clamp(1.2rem,4vw,2rem); --h2-size: clamp(1rem,2.5vw,1.5rem); }
+        }
+        @media (max-width: 768px) {
+            .card-grid.cols-3, .card-grid.cols-4 { grid-template-columns: repeat(2, 1fr); }
+            .two-col, .team-grid { grid-template-columns: 1fr; }
+            .timeline { flex-direction: column; }
+        }
+        @media (max-width: 480px) { .card-grid.cols-2 { grid-template-columns: 1fr; } }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+            html { scroll-behavior: auto; }
+            .particles { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- Shared particles layer (visible on all slides via fixed positioning) -->
+
+<!-- SLIDE 1: TITLE -->
+<section class="slide" id="slide-1">
+    <div class="orb orb-pink" style="width:clamp(250px,40vw,550px);height:clamp(250px,40vw,550px);top:5%;left:-8%;"></div>
+    <div class="orb orb-purple" style="width:clamp(180px,30vw,400px);height:clamp(180px,30vw,400px);bottom:8%;right:8%;"></div>
+    <div class="orb orb-blue" style="width:clamp(120px,20vw,280px);height:clamp(120px,20vw,280px);top:35%;right:25%;"></div>
+    <div class="particles">
+        <div class="particle" style="left:10%;animation-duration:9s;animation-delay:0s;"></div>
+        <div class="particle" style="left:25%;animation-duration:13s;animation-delay:2s;width:3px;height:3px;"></div>
+        <div class="particle" style="left:50%;animation-duration:10s;animation-delay:4s;"></div>
+        <div class="particle" style="left:70%;animation-duration:11s;animation-delay:1s;width:3px;height:3px;"></div>
+        <div class="particle" style="left:88%;animation-duration:8s;animation-delay:3s;"></div>
+    </div>
+    <div class="slide-inner" style="align-items:center;text-align:center;justify-content:center;height:100%;">
+        <div class="display-text reveal glow-text gradient-text">yam</div>
+        <div class="glow-divider reveal reveal-delay-1" style="margin:0 auto;"></div>
+        <p class="body-text reveal reveal-delay-2" style="max-width:550px;">
+            The <span class="gradient-text" style="font-weight:700;">AI-native Roblox</span> for creators and brands to engage audiences and unlock revenue
+        </p>
+        <p class="small-text reveal reveal-delay-3" style="color:var(--text-muted);">YC S25 &middot; San Francisco & New York</p>
+    </div>
+    <div class="brand-mark">yam</div>
+    <div class="slide-number">01 / 12</div>
+</section>
+
+<!-- SLIDE 2: PROBLEM -->
+<section class="slide" id="slide-2">
+    <div class="orb orb-pink" style="width:clamp(200px,30vw,400px);height:clamp(200px,30vw,400px);top:-10%;right:-5%;"></div>
+    <div class="orb orb-blue" style="width:clamp(150px,22vw,300px);height:clamp(150px,22vw,300px);bottom:5%;left:5%;"></div>
+    <div class="particles">
+        <div class="particle" style="left:15%;animation-duration:10s;animation-delay:1s;"></div>
+        <div class="particle" style="left:60%;animation-duration:12s;animation-delay:3s;"></div>
+        <div class="particle" style="left:85%;animation-duration:9s;animation-delay:0s;"></div>
+    </div>
+    <div class="brand-mark">yam</div>
+    <div class="slide-inner" style="justify-content:center;height:100%;">
+        <div class="section-label reveal">THE PROBLEM</div>
+        <h2 class="slide-title reveal reveal-delay-1">Creators are <span class="gradient-text glow-text">burning out</span></h2>
+        <div class="card-grid cols-3 reveal reveal-delay-2" style="margin-top:var(--content-gap);">
+            <div class="card">
+                <div class="card-icon">🔁</div>
+                <div class="card-title" style="color:var(--text-primary);">Content Treadmill</div>
+                <div class="card-desc">All energy on reach — none left for engaging the audience they already have</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">📉</div>
+                <div class="card-title" style="color:var(--text-primary);">Engagement Dying</div>
+                <div class="card-desc">15–25% monthly churn in Discord communities. #1 reason: "nothing to do." Losing $300–$5K/mo</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🚫</div>
+                <div class="card-title" style="color:var(--text-primary);">Platforms Retreating</div>
+                <div class="card-desc">TikTok killed Effect House. Meta shut Spark AR. Creators left without tools</div>
+            </div>
+        </div>
+        <p class="body-text reveal reveal-delay-3" style="color:var(--text-muted);margin-top:auto;">Platforms are built for reach, not engagement. Engagement drives revenue — and it's broken.</p>
+    </div>
+    <div class="slide-number">02 / 12</div>
+</section>
+
+<!-- SLIDE 3: SOLUTION -->
+<section class="slide" id="slide-3">
+    <div class="orb orb-purple" style="width:clamp(220px,35vw,450px);height:clamp(220px,35vw,450px);bottom:-5%;left:10%;"></div>
+    <div class="orb orb-blue" style="width:clamp(130px,20vw,250px);height:clamp(130px,20vw,250px);top:10%;right:10%;"></div>
+    <div class="particles">
+        <div class="particle" style="left:30%;animation-duration:11s;animation-delay:2s;width:3px;height:3px;"></div>
+        <div class="particle" style="left:75%;animation-duration:9s;animation-delay:0s;"></div>
+    </div>
+    <div class="brand-mark">yam</div>
+    <div class="slide-inner" style="justify-content:center;height:100%;">
+        <div class="section-label reveal">THE SOLUTION</div>
+        <h2 class="slide-title reveal reveal-delay-1">Think <span class="gradient-text glow-text">Midjourney</span> for miniApps</h2>
+        <p class="body-text reveal reveal-delay-2" style="max-width:650px;margin-top:var(--content-gap);">
+            AI agents inside Discord & Telegram that understand community context and proactively help creators build interactive miniApps — quizzes, polls, games, and more.
+        </p>
+        <div class="card-grid cols-2 reveal reveal-delay-3" style="margin-top:var(--content-gap);max-width:700px;">
+            <div class="card-glow card">
+                <div class="card-title gradient-text">Agentic Creation</div>
+                <div class="card-desc" style="color:var(--text-primary);opacity:0.8;">Describe in natural language → AI generates fully interactive apps in real time</div>
+            </div>
+            <div class="card-glow card">
+                <div class="card-title gradient-text">Instant Deploy</div>
+                <div class="card-desc" style="color:var(--text-primary);opacity:0.8;">Deploys directly into the community — no links, no friction</div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">03 / 12</div>
+</section>
+
+<!-- SLIDE 4: HOW IT WORKS -->
+<section class="slide" id="slide-4">
+    <div class="orb orb-pink" style="width:clamp(180px,25vw,350px);height:clamp(180px,25vw,350px);top:5%;left:-5%;"></div>
+    <div class="particles">
+        <div class="particle" style="left:20%;animation-duration:10s;animation-delay:1s;"></div>
+        <div class="particle" style="left:55%;animation-duration:12s;animation-delay:4s;width:3px;height:3px;"></div>
+        <div class="particle" style="left:80%;animation-duration:8s;animation-delay:2s;"></div>
+    </div>
+    <div class="brand-mark">yam</div>
+    <div class="slide-inner" style="justify-content:center;height:100%;">
+        <div class="section-label reveal">HOW IT WORKS</div>
+        <h2 class="slide-title reveal reveal-delay-1">Conversation to <span class="gradient-text glow-text">live experience</span></h2>
+        <div class="timeline reveal reveal-delay-2" style="margin-top:var(--content-gap);">
+            <div class="timeline-step">
+                <div class="step-num gradient-text">01</div>
+                <div class="step-title" style="color:var(--text-primary);">Learn Context</div>
+                <div class="step-desc">Bot auto-learns community topics, interests, and engagement patterns</div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-num gradient-text">02</div>
+                <div class="step-title" style="color:var(--text-primary);">Suggest Experiences</div>
+                <div class="step-desc">Recommends quizzes, games, and content based on community signals</div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-num gradient-text">03</div>
+                <div class="step-title" style="color:var(--text-primary);">Build via Chat</div>
+                <div class="step-desc">Creator describes what they want — AI generates the full interactive app</div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-num gradient-text">04</div>
+                <div class="step-title" style="color:var(--text-primary);">Deploy Instantly</div>
+                <div class="step-desc">One click to launch as a mini webapp in Discord or Telegram</div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">04 / 12</div>
+</section>
+
+<!-- SLIDE 5: WHY NOW -->
+<section class="slide" id="slide-5">
+    <div class="orb orb-blue" style="width:clamp(200px,32vw,420px);height:clamp(200px,32vw,420px);bottom:0;right:-5%;"></div>
+    <div class="orb orb-purple" style="width:clamp(140px,22vw,280px);height:clamp(140px,22vw,280px);top:10%;left:8%;"></div>
+    <div class="particles">
+        <div class="particle" style="left:40%;animation-duration:11s;animation-delay:0s;width:3px;height:3px;"></div>
+        <div class="particle" style="left:90%;animation-duration:9s;animation-delay:3s;"></div>
+    </div>
+    <div class="brand-mark">yam</div>
+    <div class="slide-inner" style="justify-content:center;height:100%;">
+        <div class="section-label reveal">WHY NOW</div>
+        <h2 class="slide-title reveal reveal-delay-1">Three forces <span class="gradient-text glow-text">converging</span></h2>
+        <div class="card-grid cols-3 reveal reveal-delay-2" style="margin-top:var(--content-gap);">
+            <div class="card">
+                <div class="card-icon">🤖</div>
+                <div class="card-title" style="color:var(--text-primary);">AI Creation Revolution</div>
+                <div class="card-desc">Anyone can build interactive experiences with natural language for the first time</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔓</div>
+                <div class="card-title" style="color:var(--text-primary);">Platform Power Vacuum</div>
+                <div class="card-desc">TikTok killed Effect House. Meta shut Spark AR. Creators need new tools</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">💬</div>
+                <div class="card-title" style="color:var(--text-primary);">1.3B Community Users</div>
+                <div class="card-desc">Discord + Telegram have massive audiences, full bot access, zero interactive infra</div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">05 / 12</div>
+</section>
+
+<!-- SLIDE 6: MARKET OPPORTUNITY -->
+<section class="slide" id="slide-6">
+    <div class="orb orb-pink" style="width:clamp(200px,30vw,380px);height:clamp(200px,30vw,380px);top:5%;right:5%;"></div>
+    <div class="orb orb-blue" style="width:clamp(120px,18vw,220px);height:clamp(120px,18vw,220px);bottom:10%;left:10%;"></div>
+    <div class="particles">
+        <div class="particle" style="left:5%;animation-duration:10s;animation-delay:2s;"></div>
+        <div class="particle" style="left:65%;animation-duration:12s;animation-delay:0s;width:3px;height:3px;"></div>
+    </div>
+    <div class="brand-mark">yam</div>
+    <div class="slide-inner" style="justify-content:center;height:100%;">
+        <div class="section-label reveal">MARKET OPPORTUNITY</div>
+        <h2 class="slide-title reveal reveal-delay-1">A <span class="gradient-text glow-text">$5B+</span> opportunity</h2>
+        <div class="two-col reveal reveal-delay-2" style="margin-top:var(--content-gap);flex:1;">
+            <div style="display:flex;flex-direction:column;gap:clamp(0.8rem,1.5vh,1.5rem);">
+                <div><div class="stat-number gradient-text glow-text">1.3B</div><div class="stat-label">Combined MAU — Discord + Telegram</div></div>
+                <div><div class="stat-number gradient-text glow-text">200–400K</div><div class="stat-label">Monetizing Discord servers</div></div>
+                <div><div class="stat-number gradient-text glow-text">3.9B</div><div class="stat-label">TikTok + Instagram users (expansion)</div></div>
+            </div>
+            <div class="card" style="height:fit-content;">
+                <div class="card-title gradient-text">The Roblox Precedent</div>
+                <div class="card-desc" style="font-size:var(--body-size);color:var(--text-primary);opacity:0.8;">Roblox generates $3.5B from 80M gamers. Discord & Telegram have 1.3B users — and zero infrastructure for interactive monetization.</div>
+                <div class="small-text" style="color:var(--text-muted);margin-top:clamp(0.3rem,0.6vh,0.5rem);">
+                    <strong style="color:var(--accent-tertiary);">Beachhead:</strong> Discord server monetizers<br>
+                    <strong style="color:var(--accent-tertiary);">Expand to:</strong> TikTok, Instagram, D2C brands
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">06 / 12</div>
+</section>
+
+<!-- SLIDE 7: TRACTION -->
+<section class="slide" id="slide-7">
+    <div class="orb orb-purple" style="width:clamp(180px,28vw,360px);height:clamp(180px,28vw,360px);bottom:-5%;right:15%;"></div>
+    <div class="particles">
+        <div class="particle" style="left:35%;animation-duration:10s;animation-delay:1s;width:3px;height:3px;"></div>
+        <div class="particle" style="left:70%;animation-duration:11s;animation-delay:4s;"></div>
+    </div>
+    <div class="brand-mark">yam</div>
+    <div class="slide-inner" style="justify-content:center;height:100%;">
+        <div class="section-label reveal">TRACTION</div>
+        <h2 class="slide-title reveal reveal-delay-1">From insight to <span class="gradient-text glow-text">pilot</span></h2>
+        <div class="timeline reveal reveal-delay-2" style="margin-top:var(--content-gap);">
+            <div class="timeline-step">
+                <div class="step-num gradient-text">15</div>
+                <div class="step-title" style="color:var(--text-primary);">Creator Interviews</div>
+                <div class="step-desc">Identified pain: balancing content creation vs. engaging audiences for conversion</div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-num gradient-text">MVP</div>
+                <div class="step-title" style="color:var(--text-primary);">Built & Shipping</div>
+                <div class="step-desc">Auto-learns context, suggests experiences, builds via chat, deploys instantly</div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-num gradient-text">4</div>
+                <div class="step-title" style="color:var(--text-primary);">Beta Creators</div>
+                <div class="step-desc">Private pilot launch with creators and their communities</div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-num gradient-text">300K+</div>
+                <div class="step-title" style="color:var(--text-primary);">Community Members</div>
+                <div class="step-desc">Beta reach across pilot creator communities</div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">07 / 12</div>
+</section>
+
+<!-- SLIDE 8: BUSINESS MODEL -->
+<section class="slide" id="slide-8">
+    <div class="orb orb-pink" style="width:clamp(160px,25vw,320px);height:clamp(160px,25vw,320px);top:0;left:-5%;"></div>
+    <div class="orb orb-blue" style="width:clamp(120px,18vw,240px);height:clamp(120px,18vw,240px);bottom:5%;right:0;"></div>
+    <div class="particles">
+        <div class="particle" style="left:45%;animation-duration:9s;animation-delay:2s;"></div>
+    </div>
+    <div class="brand-mark">yam</div>
+    <div class="slide-inner" style="justify-content:center;height:100%;">
+        <div class="section-label reveal">BUSINESS MODEL</div>
+        <h2 class="slide-title reveal reveal-delay-1">Four phases to <span class="gradient-text glow-text">full economy</span></h2>
+        <div class="card-grid cols-4 reveal reveal-delay-2" style="margin-top:var(--content-gap);">
+            <div class="card" style="border-top:2px solid var(--accent-primary);box-shadow:0 -4px 15px rgba(232,143,197,0.1);">
+                <div class="small-text" style="color:var(--accent-primary);font-weight:700;">PHASE 1</div>
+                <div class="card-title" style="color:var(--text-primary);">Creation Engine</div>
+                <div class="card-desc">Subscription + AI tokens. Creator pays to build.</div>
+            </div>
+            <div class="card" style="border-top:2px solid var(--accent-secondary);box-shadow:0 -4px 15px rgba(184,160,232,0.1);">
+                <div class="small-text" style="color:var(--accent-secondary);font-weight:700;">PHASE 2</div>
+                <div class="card-title" style="color:var(--text-primary);">In-App Purchases</div>
+                <div class="card-desc">10% platform fee on transactions — paid experiences, digital goods, tips.</div>
+            </div>
+            <div class="card" style="border-top:2px solid var(--accent-tertiary);box-shadow:0 -4px 15px rgba(136,212,232,0.1);">
+                <div class="small-text" style="color:var(--accent-tertiary);font-weight:700;">PHASE 3</div>
+                <div class="card-title" style="color:var(--text-primary);">Marketplace</div>
+                <div class="card-desc">15% fee. Clone, remix, resell. Experiences become products.</div>
+            </div>
+            <div class="card" style="border-top:2px solid var(--text-primary);box-shadow:0 -4px 15px rgba(240,238,245,0.05);">
+                <div class="small-text" style="font-weight:700;">PHASE 4</div>
+                <div class="card-title" style="color:var(--text-primary);">Full Economy</div>
+                <div class="card-desc">Brand partnerships for targeted ads within the YAM ecosystem.</div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">08 / 12</div>
+</section>
+
+<!-- SLIDE 9: COMPETITION -->
+<section class="slide" id="slide-9">
+    <div class="orb orb-purple" style="width:clamp(200px,30vw,400px);height:clamp(200px,30vw,400px);top:5%;right:-5%;"></div>
+    <div class="particles">
+        <div class="particle" style="left:20%;animation-duration:11s;animation-delay:0s;"></div>
+        <div class="particle" style="left:50%;animation-duration:9s;animation-delay:3s;width:3px;height:3px;"></div>
+    </div>
+    <div class="brand-mark">yam</div>
+    <div class="slide-inner" style="justify-content:center;height:100%;">
+        <div class="section-label reveal">COMPETITION</div>
+        <h2 class="slide-title reveal reveal-delay-1">Why <span class="gradient-text glow-text">YAM</span> wins</h2>
+        <div class="card-grid cols-2 reveal reveal-delay-2" style="margin-top:var(--content-gap);max-width:800px;">
+            <div class="card">
+                <div class="card-title" style="color:var(--text-muted);">Vibe Coding (Lovable, Bolt)</div>
+                <div class="card-desc">Build apps, but no distribution. Creators get a website, not an engaged audience.</div>
+            </div>
+            <div class="card">
+                <div class="card-title" style="color:var(--text-muted);">Discord Bots (MEE6)</div>
+                <div class="card-desc">Moderation only. No monetization, no interactive experiences.</div>
+            </div>
+            <div class="card">
+                <div class="card-title" style="color:var(--text-muted);">Creator Platforms (Stan, Beacons)</div>
+                <div class="card-desc">Sell static products. No engagement loop, no community integration.</div>
+            </div>
+            <div class="card-glow card">
+                <div class="card-title gradient-text">YAM</div>
+                <div class="card-desc" style="color:var(--text-primary);opacity:0.9;">Full-stack Roblox model: Tools + Distribution + Monetization. Deployed where the audience lives.</div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">09 / 12</div>
+</section>
+
+<!-- SLIDE 10: DATA FLYWHEEL -->
+<section class="slide" id="slide-10">
+    <div class="orb orb-pink" style="width:clamp(180px,28vw,350px);height:clamp(180px,28vw,350px);bottom:5%;left:5%;"></div>
+    <div class="orb orb-blue" style="width:clamp(140px,20vw,260px);height:clamp(140px,20vw,260px);top:10%;right:10%;"></div>
+    <div class="particles">
+        <div class="particle" style="left:10%;animation-duration:10s;animation-delay:1s;width:3px;height:3px;"></div>
+        <div class="particle" style="left:80%;animation-duration:12s;animation-delay:4s;"></div>
+    </div>
+    <div class="brand-mark">yam</div>
+    <div class="slide-inner" style="justify-content:center;height:100%;">
+        <div class="section-label reveal">THE MOAT</div>
+        <h2 class="slide-title reveal reveal-delay-1"><span class="gradient-text glow-text">Data flywheel</span> others can't build</h2>
+        <div class="two-col reveal reveal-delay-2" style="margin-top:var(--content-gap);">
+            <div>
+                <ul class="bullet-list">
+                    <li>We live <strong>inside</strong> the community — not outside it</li>
+                    <li>Every interaction captures engagement signals, preferences, behavior</li>
+                    <li>AI learns what the community wants and helps creators deliver</li>
+                    <li>Better experiences → more engagement → more data → better suggestions</li>
+                </ul>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:clamp(0.5rem,1vh,0.8rem);">
+                <div class="card" style="background:rgba(232,143,197,0.06);border-color:rgba(232,143,197,0.15);box-shadow:0 0 15px rgba(232,143,197,0.05);">
+                    <div class="stat-number" style="color:var(--accent-primary);font-size:clamp(1.5rem,3vw,2.5rem);">20–40%</div>
+                    <div class="stat-label">Telegram Mini App CTRs</div>
+                </div>
+                <div class="card" style="background:rgba(136,212,232,0.06);border-color:rgba(136,212,232,0.15);box-shadow:0 0 15px rgba(136,212,232,0.05);">
+                    <div class="stat-number" style="color:var(--accent-tertiary);font-size:clamp(1.5rem,3vw,2.5rem);">28%</div>
+                    <div class="stat-label">Telegram engagement (10× Instagram)</div>
+                </div>
+                <div class="card" style="background:rgba(184,160,232,0.06);border-color:rgba(184,160,232,0.15);box-shadow:0 0 15px rgba(184,160,232,0.05);">
+                    <div class="stat-number" style="color:var(--accent-secondary);font-size:clamp(1.5rem,3vw,2.5rem);">2×</div>
+                    <div class="stat-label">More conversions from interactive content</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">10 / 12</div>
+</section>
+
+<!-- SLIDE 11: TEAM -->
+<section class="slide" id="slide-11">
+    <div class="orb orb-purple" style="width:clamp(220px,35vw,450px);height:clamp(220px,35vw,450px);top:-8%;left:15%;"></div>
+    <div class="particles">
+        <div class="particle" style="left:30%;animation-duration:11s;animation-delay:2s;"></div>
+        <div class="particle" style="left:70%;animation-duration:9s;animation-delay:0s;width:3px;height:3px;"></div>
+    </div>
+    <div class="brand-mark">yam</div>
+    <div class="slide-inner" style="justify-content:center;height:100%;">
+        <div class="section-label reveal">THE TEAM</div>
+        <h2 class="slide-title reveal reveal-delay-1">Built by people who <span class="gradient-text glow-text">lived it</span></h2>
+        <div class="team-grid reveal reveal-delay-2" style="margin-top:var(--content-gap);">
+            <div>
+                <div class="team-name gradient-text">Qinyu</div>
+                <div class="team-role">Creator Tools Expert</div>
+                <div class="team-creds">TikTok Effect House — AI tools for 800K+ AR creators, 5× publishing rates. Built Discord's 6th largest server (800K members). Swift Media — GenAI modding tools, 2,300+ creators in 5 months. 2 patents in mixed reality.</div>
+            </div>
+            <div>
+                <div class="team-name gradient-text">Shan</div>
+                <div class="team-role">Product & Growth</div>
+                <div class="team-creds">Instagram & Messenger — shipped for billions of users. Founded KabCash — 0→100K users, $2M ARR year one. ConsenSys/MetaMask — community adoption, 100M users. Previous YC acceptance (2022).</div>
+            </div>
+            <div>
+                <div class="team-name gradient-text">Crystal</div>
+                <div class="team-role">Design & Experience</div>
+                <div class="team-creds">Cisco AI Agent Studio — designed agent creation from scratch. 2 years growth design at Webex for millions. Founding designer at Amesite — gamified learning, zero to IPO.</div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-number">11 / 12</div>
+</section>
+
+<!-- SLIDE 12: CLOSING -->
+<section class="slide" id="slide-12">
+    <div class="orb orb-pink" style="width:clamp(250px,40vw,550px);height:clamp(250px,40vw,550px);top:10%;left:-10%;"></div>
+    <div class="orb orb-purple" style="width:clamp(200px,32vw,420px);height:clamp(200px,32vw,420px);bottom:5%;right:5%;"></div>
+    <div class="orb orb-blue" style="width:clamp(130px,20vw,260px);height:clamp(130px,20vw,260px);top:40%;right:30%;"></div>
+    <div class="particles">
+        <div class="particle" style="left:8%;animation-duration:9s;animation-delay:0s;"></div>
+        <div class="particle" style="left:25%;animation-duration:13s;animation-delay:2s;width:3px;height:3px;"></div>
+        <div class="particle" style="left:48%;animation-duration:10s;animation-delay:4s;"></div>
+        <div class="particle" style="left:68%;animation-duration:11s;animation-delay:1s;width:3px;height:3px;"></div>
+        <div class="particle" style="left:90%;animation-duration:8s;animation-delay:3s;"></div>
+    </div>
+    <div class="brand-mark">yam</div>
+    <div class="slide-inner" style="align-items:center;text-align:center;justify-content:center;height:100%;">
+        <div class="display-text reveal glow-text gradient-text">yam</div>
+        <div class="glow-divider reveal reveal-delay-1" style="margin:0 auto;"></div>
+        <p class="body-text reveal reveal-delay-2" style="max-width:550px;">
+            Creators don't lack tools — they lack an <span class="gradient-text" style="font-weight:700;">ecosystem</span>. We're building the Roblox for community-driven interactive experiences.
+        </p>
+        <div class="reveal reveal-delay-3" style="display:flex;gap:clamp(1rem,3vw,3rem);margin-top:clamp(0.5rem,1.5vh,1.5rem);">
+            <div style="text-align:center;"><div class="stat-number gradient-text glow-text" style="font-size:clamp(1.5rem,3vw,2.5rem);">$5B+</div><div class="stat-label">Market</div></div>
+            <div style="text-align:center;"><div class="stat-number gradient-text glow-text" style="font-size:clamp(1.5rem,3vw,2.5rem);">1.3B</div><div class="stat-label">Users</div></div>
+            <div style="text-align:center;"><div class="stat-number gradient-text glow-text" style="font-size:clamp(1.5rem,3vw,2.5rem);">300K+</div><div class="stat-label">Beta Reach</div></div>
+        </div>
+        <p class="small-text reveal reveal-delay-4" style="color:var(--text-muted);">bqshan@umich.edu &middot; San Francisco & New York</p>
+    </div>
+    <div class="slide-number">12 / 12</div>
+</section>
+
+<script>
+class SlidePresentation {
+    constructor() {
+        this.slides = document.querySelectorAll('.slide');
+        this.currentSlide = 0;
+        this.isTransitioning = false;
+        this.touchStartY = 0;
+        this.init();
+    }
+    init() {
+        this.createNavDots();
+        this.slides[0].classList.add('visible');
+        this.updateNavDots();
+        this.updateProgress();
+        document.addEventListener('keydown', (e) => this.handleKeydown(e));
+        document.addEventListener('wheel', (e) => this.handleWheel(e), { passive: false });
+        document.addEventListener('touchstart', (e) => { this.touchStartY = e.touches[0].clientY; }, { passive: true });
+        document.addEventListener('touchend', (e) => { const d = this.touchStartY - e.changedTouches[0].clientY; if (Math.abs(d) > 50) d > 0 ? this.next() : this.prev(); }, { passive: true });
+        const obs = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.3 });
+        this.slides.forEach(s => obs.observe(s));
+    }
+    createNavDots() {
+        const nav = document.getElementById('navDots');
+        this.slides.forEach((_, i) => { const d = document.createElement('button'); d.className = 'nav-dot'; d.setAttribute('aria-label', `Slide ${i+1}`); d.addEventListener('click', () => this.goTo(i)); nav.appendChild(d); });
+    }
+    handleKeydown(e) {
+        if (['ArrowDown','ArrowRight',' '].includes(e.key)) { e.preventDefault(); this.next(); }
+        else if (['ArrowUp','ArrowLeft'].includes(e.key)) { e.preventDefault(); this.prev(); }
+    }
+    handleWheel(e) { e.preventDefault(); if (this.isTransitioning) return; if (e.deltaY > 30) this.next(); else if (e.deltaY < -30) this.prev(); }
+    next() { if (this.currentSlide < this.slides.length - 1) this.goTo(this.currentSlide + 1); }
+    prev() { if (this.currentSlide > 0) this.goTo(this.currentSlide - 1); }
+    goTo(i) {
+        if (this.isTransitioning || i === this.currentSlide) return;
+        this.isTransitioning = true; this.currentSlide = i;
+        this.slides[i].scrollIntoView({ behavior: 'smooth' }); this.slides[i].classList.add('visible');
+        this.updateNavDots(); this.updateProgress();
+        setTimeout(() => { this.isTransitioning = false; }, 600);
+    }
+    updateNavDots() { document.querySelectorAll('.nav-dot').forEach((d, i) => d.classList.toggle('active', i === this.currentSlide)); }
+    updateProgress() { document.getElementById('progressBar').style.width = ((this.currentSlide + 1) / this.slides.length) * 100 + '%'; }
+}
+document.addEventListener('DOMContentLoaded', () => new SlidePresentation());
+</script>
+</body>
+</html>
